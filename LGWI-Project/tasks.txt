@@ -1,0 +1,19 @@
+
+
+Client:
+B-UI mockup v2- WIP 
+Find image-to-text library
+PDF maker (for receipt printing)
+Records view screen
+CSV import/export
+Find Spanish translation library?
+
+
+Server:
+Find service (Firebase, AWS, etc.)
+Online web-viewer for uploaded CSVs?
+CSV formatting
+
+Other:
+J-Website 12/15/23
+B-Project Status Report 12/5/23

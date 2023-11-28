@@ -1,20 +1,62 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button, Platform } from 'react-native';
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { globalStyles } from './styles/globalStyles.js';
+
+
+/* Import of all screens for react navigation */
+import HomeScreen from "./screens/home";
+import InputScreen from "./screens/input";
+import ViewScreen from "./screens/view";
+import SettingsScreen from "./screens/settings";
+import LoginScreen from "./screens/login";
+import MenuScreen from "./screens/menu";
+import Tabs from './shared/footer';
+
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="home">
+        {/*Stack group for home login and register screen */}
+        <Stack.Group
+          screenOptions={{
+            title: 'LGWI Management System',
+            headerTitleStyle: {
+              fontSize: 24,
+            },
+            headerTintColor: '#fff',
+            headerBackTitleVisible: false,
+            headerStyle: {
+              backgroundColor: '#953635',
+            },
+          }}>
+
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Login" component={LoginScreen} />
+        </Stack.Group>
+
+
+        {/*Stack group for menu pages and order pages */}
+        <Stack.Group
+          screenOptions={{
+            title: '',
+            headerTintColor: '#fff',
+            headerBackTitleVisible: false,
+            headerStyle: {
+              backgroundColor: '#953635',
+            },
+          }}>
+          <Stack.Screen name="tabsHome" component={Tabs} options={{ headerShown: false, }} />
+          <Stack.Screen name="Menu" component={MenuScreen} options={{ headerShown: true }} />
+          <Stack.Screen name="Input" component={InputScreen} />
+          <Stack.Screen name="View" component={ViewScreen} />
+          <Stack.Screen name="Settings" component={SettingsScreen} />
+        </Stack.Group>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

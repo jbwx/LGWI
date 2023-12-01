@@ -15,13 +15,12 @@ export default function Tabs() {
   return (
     <Tab.Navigator
       screenOptions={{
-
-        tabBarInactiveTintColor: '#fff',
-        tabBarActiveTintColor: '#EDE81B',
+        tabBarInactiveTintColor: 'lightgrey',
+        tabBarActiveTintColor: 'white',
         headerShown: true,
         tabBarStyle: {
           position: 'absolute',
-          backgroundColor: '#953635',
+          backgroundColor: 'black',
           left: 0,
           bottom: 0,
           right: 0,
@@ -29,16 +28,15 @@ export default function Tabs() {
         },
         headerTintColor: '#fff',
         headerStyle: {
-          backgroundColor: '#953635',
+          backgroundColor: 'black',
         },
         headerTitleStyle: {
-          fontSize: '34',
-
+          fontSize: '28',
         },
 
       }}>
 
-      <Tab.Screen name="Menu" component={MenuScreen} options={{
+      <Tab.Screen name="Home" component={MenuScreen} options={{
         tabBarIcon: ({ color, size }) => (
           <Ionicons name="home-outline" color={color} size={size} />),
       }} />

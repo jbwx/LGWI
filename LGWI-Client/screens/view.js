@@ -1,35 +1,74 @@
-import React, { useState } from 'react';
-import { Text, View, StyleSheet, Button, ScrollView, TextInput } from 'react-native';
+import React, { useState, Component } from 'react';
+import { Text, View, StyleSheet, Button, ScrollView } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 
-export default function ViewScreen({ navigation }) {
+export default function ViewScreen({ navigation, Component }) {
   const [searchText, setSearchText] = useState('');
+  const [filter, setFilter] = useState({
+    selectedValue: '',
+    category: [
+      {
+        ItemName: 'All',
+      },
+      {
+        ItemName: 'Name',
+      },
+      {
+        ItemName: 'Paid',
+      },
+      {
+        ItemName: 'Owed',
+      }
+    ]
+  });
+
+  const handleFilterChange = (value) => {
+    setFilter({ ...filter, selectedValue: value });
+  };
 
   return (
     <View style={styles.container}>
-
       <ScrollView style={styles.card}>
-        <View style={styles.searchContainer}>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search"
-            value={searchText}
-            onChangeText={text => setSearchText(text)}
-          />
-          <View style={styles.buttonContainer}>
-            <Button title="Search" color="black" style={styles.button} onPress={() => console.log('Search button pressed')} />
-          </View>
-        </View>
-        <Text style={styles.text}>Line 1</Text>
-        <Text style={styles.text}>Line 2</Text>
-        <Text style={styles.text}>Line 3</Text>
-        <Text style={styles.text}>Line 4</Text>
-        <Text style={styles.text}>Line 5</Text>
-        <Text style={styles.text}>Line 6</Text>
-        <Text style={styles.text}>Line 7</Text>
+        <Picker
+          style={[styles.picker]}
+          itemStyle={{ height: 50 }}
+          mode="dropdown"
+          selectedValue={filter.selectedValue}
+          onValueChange={handleFilterChange}
+        >
+          {filter.category.map((item, index) => (
+            <Picker.Item
+              key={index}
+              label={item.ItemName}
+              value={item.ItemName}
+              color='black'
+            />
+          ))}
+        </Picker>
+
+        <Text style={styles.text}>John</Text>
+        <Text style={styles.text}>Emma</Text>
+        <Text style={styles.text}>Michael</Text>
+        <Text style={styles.text}>Sophia</Text>
+        <Text style={styles.text}>William</Text>
+        <Text style={styles.text}>Olivia</Text>
+        <Text style={styles.text}>James</Text>
+        <Text style={styles.text}>Liam</Text>
+        <Text style={styles.text}>Ava</Text>
+        <Text style={styles.text}>Benjamin</Text>
+        <Text style={styles.text}>Mia</Text>
+        <Text style={styles.text}>Lucas</Text>
+        <Text style={styles.text}>Charlotte</Text>
+        <Text style={styles.text}>Alexander</Text>
+        <Text style={styles.text}>Amelia</Text>
+        <Text style={styles.text}>Henry</Text>
+        <Text style={styles.text}>Harper</Text>
+        <Text style={styles.text}>Daniel</Text>
+        <Text style={styles.text}>Evelyn</Text>
       </ScrollView>
+
       <View style={styles.buttonBottomContainer}>
-        <Button title="Back" color="black" style={styles.button} onPress={() => navigation.goBack()} />
-        <Button title="Edit" color="black" style={styles.button} onPress={() => console.log('Edit button pressed')} />
+        <Button title="Change System" color="#03312E" style={styles.button} onPress={() => navigation.goBack()} />
       </View>
     </View>
   );
@@ -62,8 +101,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: 'black',
-    marginVertical: 10,
-    marginHorizontal: 20,
+    marginVertical: 5,
+    marginHorizontal: 10,
     borderWidth: 1,
     borderColor: 'darkgrey',
     borderRadius: 8,
@@ -75,38 +114,32 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     justifyContent: 'space-between',
     marginHorizontal: 40,
-    backgroundColor: 'darkgrey',
+    backgroundColor: '#009F93',
     padding: 5,
     borderRadius: 10,
     position: 'absolute',
     bottom: 100,
   },
   button: {
-    backgroundColor: 'darkgrey',
-    borderColor: 'darkgrey',
+    backgroundColor: '#009F93',
+    borderColor: '#03312E',
     padding: 15,
     textAlign: 'center',
     borderRadius: 5,
     width: '30%',
   },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  searchInput: {
+  picker: {
     flex: 1,
-    height: 40,
     borderWidth: 1,
-    borderColor: 'darkgrey',
+    borderColor: '#03312E',
     borderRadius: 8,
-    paddingHorizontal: 20,
-    marginRight: 10,
+    marginVertical: 10,
+    backgroundColor: '#009F93',
   },
   buttonContainer: {
     width: 100,
     height: 40,
-    backgroundColor: 'darkgrey',
+    backgroundColor: '#009F93',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,

@@ -15,23 +15,27 @@ export default function Tabs() {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarInactiveTintColor: 'lightgrey',
-        tabBarActiveTintColor: 'white',
+        tabBarInactiveTintColor: '#037171',
+        tabBarActiveTintColor: '#03312E',
         headerShown: true,
         tabBarStyle: {
           position: 'absolute',
-          backgroundColor: 'black',
+          backgroundColor: '#02C3BD',
           left: 0,
           bottom: 0,
           right: 0,
           padding: 5,
+          borderTopLeftRadius: 15, // Add this line
+          borderTopRightRadius: 15, // Add this line
         },
         headerTintColor: '#fff',
         headerStyle: {
-          backgroundColor: 'black',
+          backgroundColor: '#02C3BD',
+          borderBottomLeftRadius: 15, // Add this line
+          borderBottomRightRadius: 15, // Add this line
         },
         headerTitleStyle: {
-          fontSize: '28',
+          fontSize: '1',
         },
 
       }}>

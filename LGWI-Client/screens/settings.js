@@ -17,6 +17,9 @@ export default function SettingsScreen({ navigation }) {
           onValueChange={toggleDarkMode}
         />
       </View>
+      <Text style={styles.textLine}>Text Line 1</Text>
+      <Text style={styles.textLine}>Text Line 2</Text>
+      <Text style={styles.textLine}>Text Line 3</Text>
     </View>
   );
 };
@@ -26,6 +29,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
+
   title: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -40,5 +44,8 @@ const styles = StyleSheet.create({
   settingText: {
     fontSize: 16,
   },
+  textLine: {
+    fontSize: 16,
+    marginBottom: 8,
+  },
 });
-

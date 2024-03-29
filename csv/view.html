@@ -1,0 +1,222 @@
+<title>LGWI Liquid Metrics File View</title>
+<style>
+
+#contentBox {
+    position: absolute;
+    left: 10%;
+    right: 50%;
+    top: 5%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#shown {
+    font-size: 25pt;
+    color: #818181;
+    margin-bottom: 2%;
+}
+
+#fileZone {
+    background-color: #e5e5e5;
+    padding: 1%;
+}
+
+.file img{
+    width: 4%;
+    margin-right: 1%;
+}
+
+.file .downloadIMG{
+  position:absolute;
+  right: 1%;
+  display: none;
+}
+
+.file {
+    background-color: #cbcbcb;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 1%;
+    margin-bottom: 1%;
+}
+
+.bytesText {
+    color:#878787;
+    position: absolute;
+    font-size: 9pt;
+    right: 8% !important;
+}
+
+#usageBar {
+  margin-top: 5%;
+  background-color: #aeaeae;
+  border-radius: 1vh;
+  height: 2%;
+  width: 100%;
+  font-size: 4pt;
+  padding: 0;
+}
+
+#usedBar {
+    background-color: rgb(220, 126, 126);
+    height: 100%;
+    width: 0%;
+    border-radius: 1vh;
+}
+
+#usageStat {
+  margin-top: 1%;
+  font-size: 8pt;
+  color:#555555;
+}
+
+.file:hover {
+  background-color: #b5b5b5;
+}
+
+.file:hover .downloadIMG {
+  display: block;
+}
+
+.downloadIMG:hover {
+  cursor:pointer;
+}
+
+#links {
+  text-align: right;
+  text-decoration: none;
+  font-size: 8pt;
+  color: #555555;
+  cursor: pointer;
+}
+
+#links a {
+  text-decoration: none;
+  color: #555555;
+}
+
+
+</style>
+
+<div id=contentBox>
+    <div id=shown>Showing 0 of 0 files</div>
+    <div id="fileZone">
+    <span id=contentshere>
+        <!-- <div class="file"><img class="csvIMG" src="csv.png">Example.csv <span class=bytesText>20 bytes</span></div> -->
+    </span>
+    <div id=usageBar><div id=usedBar>&nbsp;</div></div>
+    <div id=usageStat>0 bytes of 1gb used (0%)</div>
+    <div id=links><a onClick="refresh();">Refresh</a> • <a href=https://console.firebase.google.com/u/0/project/lgwi-csv/overview>Firestore Database</a></div>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<script>  
+const firebaseConfig = {
+  apiKey: "AIzaSyAqShP9wzIwu-YLljSmcBy2KOBZzzZRoog",
+  authDomain: "lgwi-csv.firebaseapp.com",
+  projectId: "lgwi-csv",
+  storageBucket: "lgwi-csv.appspot.com",
+  messagingSenderId: "949701907108",
+  appId: "1:949701907108:web:6e22714f0abe16c7a54c31",
+  measurementId: "G-0DLF9N9XKY"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+// Get a reference to the Firestore database
+const firestore = firebase.firestore();
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script>
+
+  validate()
+
+  function validate(){
+    if((window.location.href).substring(window.location.href.lastIndexOf("#") + 1) == "valid") {
+      let currentURL = window.location.href; // Get current URL
+      let newURL = currentURL.split('#')[0]; // Split URL by '#' and take the first part
+      window.history.replaceState({}, document.title, newURL); // Replace URL without anything after '#'
+    } else {
+      window.location.replace("login.html");
+    }
+  }
+
+  function refresh(){
+    window.location.href += "#valid";
+    window.location.reload();
+  }
+
+let conts = [];
+let names = [];
+
+read();
+
+function read() {
+  let totalBytes = 0;
+  let inx = 0;
+  let fileZoneDOM = document.getElementById("contentshere");
+  let totalFiles = 0;
+  
+  firestore.collection("csv-files").get()
+    .then((querySnapshot) => {
+      const promises = [];
+      
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data && data.hasOwnProperty('content')) {
+          console.log(doc.id + ": " + data.content);
+          conts[inx] = data.content;
+          names[inx] = doc.id;
+          fileZoneDOM.innerHTML += `
+          <div class="file"><img src="csv.png">` + doc.id +`.csv <span class=bytesText>` + formatBytes(data.content.length) + ` </span><img src="download.png" class="downloadIMG" onclick="downloadFile(` + inx + `)"></div>
+          `;
+          inx++;
+          totalFiles++;
+          totalBytes += data.content.length + doc.id.length;
+        } // else error retrieving content
+        
+        promises.push(Promise.resolve());
+      });
+      return Promise.all(promises);
+    })
+    .then(() => {
+      document.getElementById("shown").innerHTML = "Showing " + totalFiles + " of " + totalFiles + " files";
+      document.getElementById("usedBar").style = "width: " + (1+((totalBytes/1000000000)*100)) + "%;";
+      document.getElementById("usageStat").innerHTML = formatBytes(totalBytes) + " of 1gb used (" + ("" + (0.01+(totalBytes/1000000000)*100)).substring(0,4) + "%)";
+    })
+    .catch((error) => {
+      console.error("Error getting documents: ", error);
+    });
+}
+
+function downloadFile(index) {
+
+  const fileContent = conts[index];
+  const blob = new Blob([fileContent], { type: "text/plain" });
+  const link = document.createElement("a");
+  link.href = window.URL.createObjectURL(blob);
+  link.download = names[index] + ".csv";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function formatBytes(bytes) {
+    const KB = 1000;
+    const MB = KB * KB;
+
+    if (bytes < KB) {
+        return bytes + " bytes";
+    } else if (bytes < MB) {
+        return (bytes / KB).toFixed(1) + "kb";
+    } else {
+        return (bytes / MB).toFixed(1) + "mb";
+    }
+}
+
+
+</script>
